@@ -2,126 +2,134 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Auditoría de Inventario</title>
-  
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Auditoría">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventario del Local</title>
   
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
   
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    body { background: #f4f6f8; color: #1e293b; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; padding: 12px; padding-top: calc(12px + env(safe-area-inset-top)); }
-    .app { max-width: 600px; margin: 0 auto; }
+    /* Definición de colores reales para que no se quede en blanco */
+    :root {
+      --color-background-primary: #ffffff;
+      --color-background-secondary: #f8fafc;
+      --color-text-primary: #0f172a;
+      --color-text-secondary: #64748b;
+      --color-border-primary: #cbd5e1;
+      --color-border-secondary: #94a3b8;
+      --color-border-tertiary: #e2e8f0;
+      --font-sans: system-ui, -apple-system, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #f1f5f9; color: var(--color-text-primary); font-family: var(--font-sans); padding: 12px; }
+    .app { max-width: 600px; margin: 0 auto; background: #ffffff; padding: 1.5rem; border-radius: 14px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
     
-    .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-direction: column; gap: 10px; }
-    .title { font-size: 18px; font-weight: 600; color: #0f172a; width: 100%; text-align: center; display: flex; align-items: center; justify-content: center; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 12px; }
+    .title { font-size: 18px; font-weight: 600; color: var(--color-text-primary); display: flex; align-items: center; }
     
-    .tabs { display: flex; gap: 4px; background: #e2e8f0; border-radius: 8px; padding: 4px; width: 100%; }
-    .tab { flex: 1; padding: 10px 4px; font-size: 12px; border: none; background: none; border-radius: 6px; color: #64748b; font-weight: 500; text-align: center; }
-    .tab.active { background: #fff; color: #0f172a; box-shadow: 0 1px 3px rgba(0,0,0,0.1); font-weight: 600; }
+    .tabs { display: flex; gap: 4px; background: var(--color-background-secondary); border-radius: 8px; padding: 4px; border: 1px solid var(--color-border-tertiary); }
+    .tab { padding: 8px 16px; font-size: 13px; border: none; background: none; cursor: pointer; border-radius: 6px; color: var(--color-text-secondary); font-weight: 500; transition: all .15s; }
+    .tab.active { background: var(--color-background-primary); color: var(--color-text-primary); font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
     
-    /* Indicadores optimizados para móvil */
-    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 1rem; }
-    .stat { background: #fff; border-radius: 8px; padding: 8px 4px; border: 1px solid #e2e8f0; text-align: center; }
-    .stat-label { font-size: 10px; color: #64748b; font-weight: 500; text-transform: uppercase; margin-bottom: 2px; }
-    .stat-val { font-size: 16px; font-weight: 700; color: #0f172a; }
-    .stat-val.success { color: #16a34a; }
-    .stat-val.warn { color: #2563eb; }
-    .stat-val.danger { color: #dc2626; }
+    .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 1.5rem; }
+    .stat { background: var(--color-background-secondary); border-radius: 10px; padding: .85rem 1rem; border: 1px solid var(--color-border-tertiary); }
+    .stat-label { font-size: 11px; color: var(--color-text-secondary); text-transform: uppercase; font-weight: 600; margin-bottom: 4px; }
+    .stat-val { font-size: 20px; font-weight: 700; color: var(--color-text-primary); }
+    .stat-val.warn { color: #b45309; }
+    .stat-val.danger { color: #b91c1c; }
     
-    .toolbar { display: flex; gap: 8px; margin-bottom: 1rem; flex-direction: column; background: #fff; padding: 10px; border-radius: 10px; border: 1px solid #e2e8f0; }
-    .toolbar input[type=text] { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; -webkit-appearance: none; }
-    .toolbar select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; font-size: 14px; -webkit-appearance: none; }
+    .toolbar { display: flex; gap: 8px; margin-bottom: 1rem; flex-direction: column; }
+    .toolbar input[type=text], .toolbar select { width: 100%; padding: 10px; border: 1px solid var(--color-border-primary); border-radius: 8px; font-size: 14px; background: #fff; outline: none; }
     .btn-group { display: flex; gap: 6px; width: 100%; }
     
-    .btn { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 4px; padding: 12px; font-size: 13px; font-weight: 600; border-radius: 8px; border: 1px solid transparent; -webkit-appearance: none; }
-    .btn-primary { background: #4f46e5; color: #fff; }
-    .btn-scan { background: #10b981; color: #fff; }
-    .btn-danger { background: #ef4444; color: #fff; }
-    .btn-secondary { background: #fff; border-color: #cbd5e1; color: #475569; }
-
-    .location-toggle { display: flex; background: #f1f5f9; padding: 4px; border-radius: 8px; margin-bottom: 12px; border: 1px solid #cbd5e1; }
-    .loc-btn { flex: 1; padding: 10px 4px; border: none; background: none; border-radius: 6px; font-weight: 600; font-size: 12px; color: #64748b; display: flex; align-items: center; justify-content: center; gap: 4px; }
-    .loc-btn.active { background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.08); }
-    .loc-btn.active.percha { color: #4f46e5; }
-    .loc-btn.active.bodega { color: #ea580c; }
-
-    /* Tabla adaptada a iPhone */
-    .tbl-wrap { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; }
-    table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    th { text-align: left; padding: 8px 10px; font-weight: 600; font-size: 11px; color: #64748b; border-bottom: 1px solid #e2e8f0; background: #f8fafc; }
-    td { padding: 10px; border-bottom: 1px solid #e2e8f0; color: #334155; vertical-align: middle; }
+    .tbl-wrap { overflow-x: auto; border: 1px solid var(--color-border-tertiary); border-radius: 12px; background: #fff; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { text-align: left; padding: 10px 12px; font-weight: 600; font-size: 12px; color: var(--color-text-secondary); border-bottom: 1px solid var(--color-border-tertiary); background: var(--color-background-secondary); }
+    td { padding: 12px; border-bottom: 1px solid var(--color-border-tertiary); color: var(--color-text-primary); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
     
-    .sub-units { font-size: 11px; color: #64748b; display: block; margin-top: 1px; }
-    .badge { display: inline-block; padding: 2px 6px; border-radius: 20px; font-size: 10px; font-weight: 600; text-transform: uppercase; }
-    .badge-sob { background: #dbeafe; color: #1d4ed8; }
-    .badge-fal { background: #fee2e2; color: #b91c1c; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .badge-ok { background: #dcfce7; color: #15803d; }
+    .badge-low { background: #fef3c7; color: #b45309; }
+    .badge-out { background: #fee2e2; color: #b91c1c; }
+    
+    .btn-primary, .btn-scan, .btn-edit { display: inline-flex; align-items: center; justify-content: center; gap: 4px; border: 1px solid var(--color-border-primary); border-radius: 8px; padding: 10px 14px; font-size: 13px; cursor: pointer; font-weight: 600; background: #fff; color: var(--color-text-primary); }
+    .btn-primary { background: #4f46e5; color: #fff; border-color: #4f46e5; flex: 1; }
+    .btn-scan { background: #10b981; color: #fff; border-color: #10b981; flex: 1; }
+    .btn-edit { padding: 4px 8px; font-size: 12px; }
     
     .section { display: none; } .section.active { display: block; }
-    .empty { text-align: center; padding: 2rem 1rem; color: #64748b; font-size: 13px; }
+    .empty { text-align: center; padding: 2.5rem; color: var(--color-text-secondary); font-size: 14px; }
 
-    /* Escáner en pantalla completa para iOS */
-    .scanner-modal { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 40px 20px; }
-    .scanner-box { position: relative; width: 100%; max-width: 300px; aspect-ratio: 1/1; background: #000; border-radius: 16px; overflow: hidden; }
+    /* Scanner Móvil Fullscreen */
+    .scanner-modal { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 20px; }
+    .scanner-box { position: relative; width: 100%; max-width: 320px; aspect-ratio: 1/1; background: #000; border-radius: 16px; overflow: hidden; margin: auto 0; }
     #scan-video { width: 100%; height: 100%; object-fit: cover; }
     .scan-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
-    .scan-frame { width: 80%; aspect-ratio: 2.2/1; border: 2px solid #10b981; border-radius: 8px; position: relative; box-shadow: 0 0 0 9999px rgba(0,0,0,0.6); }
-    .scan-line { position: absolute; left: 0; right: 0; height: 3px; background: #10b981; animation: scanline 1.8s linear infinite; }
+    .scan-frame { width: 80%; aspect-ratio: 2.5/1; border: 2px solid #10b981; border-radius: 8px; box-shadow: 0 0 0 9999px rgba(0,0,0,0.6); position: relative; }
+    .scan-line { position: absolute; left: 0; right: 0; height: 3px; background: #10b981; animation: scanline 2s linear infinite; }
     @keyframes scanline { 0% { top: 0% } 50% { top: 100% } 100% { top: 0% } }
+    
+    .scan-label { color: #fff; font-size: 14px; text-align: center; margin-bottom: 10px; }
+    .scan-result-box { background: #fff; border-radius: 12px; width: 100%; max-width: 340px; padding: 1rem; margin-bottom: 15px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3); }
+    .btn-close-scan { padding: 12px; width: 100%; max-width: 260px; border-radius: 8px; border: none; background: #ef4444; color: #fff; font-weight: 600; font-size: 14px; cursor: pointer; }
 
-    /* Modales Emergentes */
-    .modal-bg { position: fixed; inset: 0; background: rgba(15,23,42,0.6); z-index: 8000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); padding: 12px; }
-    .modal { background: #fff; border-radius: 14px; padding: 16px; width: 100%; max-width: 350px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.15); }
-    .modal h3 { font-size: 15px; font-weight: 600; margin-bottom: 12px; color: #0f172a; text-align: center; }
-    .field { margin-bottom: 8px; }
-    .field label { display: block; font-size: 11px; color: #64748b; font-weight: 500; margin-bottom: 2px; }
-    .field input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 14px; -webkit-appearance: none; }
-    .field input:disabled { background: #f1f5f9; color: #64748b; opacity: 1; }
-    .modal-btns { display: flex; gap: 8px; margin-top: 14px; }
-
-    .alert-card { background: #fff; border-radius: 10px; border: 1px solid #e2e8f0; padding: 10px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
-    .upload-zone { border: 2px dashed #cbd5e1; background: #fff; border-radius: 12px; padding: 2rem 1rem; text-align: center; cursor: pointer; }
+    /* Modales de edición */
+    .modal-bg { position: fixed; inset: 0; background: rgba(15,23,42,0.6); z-index: 8000; display: flex; align-items: center; justify-content: center; padding: 12px; backdrop-filter: blur(2px); }
+    .modal { background: #fff; border-radius: 14px; padding: 1.5rem; width: 100%; max-width: 340px; }
+    .modal h3 { font-size: 16px; font-weight: 600; margin-bottom: 12px; color: var(--color-text-primary); }
+    .field { margin-bottom: 10px; }
+    .field label { display: block; font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px; font-weight: 500; }
+    .field input { width: 100%; padding: 10px; border: 1px solid var(--color-border-primary); border-radius: 8px; font-size: 14px; outline: none; }
+    .modal-btns { display: flex; gap: 8px; justify-content: flex-end; margin-top: 1.25rem; }
+    
+    .alert-card { background: var(--color-background-secondary); border-radius: 12px; border: 1px solid var(--color-border-tertiary); padding: 1rem; margin-bottom: .75rem; display: flex; align-items: center; gap: 12px; }
+    .upload-zone { border: 2px dashed var(--color-border-secondary); border-radius: 12px; padding: 2rem 1rem; text-align: center; cursor: pointer; background: #fff; }
   </style>
 </head>
 <body>
 
 <div class="app">
   <div class="topbar">
-    <span class="title"><i class="ti ti-building-warehouse" style="margin-right:6px;color:#4f46e5"></i>Auditoría Móvil</span>
+    <span class="title"><i class="ti ti-package" style="margin-right:6px; color:#4f46e5;"></i>Inventario Cris</span>
     <div class="tabs">
-      <button class="tab active" id="tab-inventario" onclick="showTab('inventario')">Conteo</button>
-      <button class="tab" id="tab-alertas" onclick="showTab('alertas')">Descuadres</button>
-      <button class="tab" id="tab-importar" onclick="showTab('importar')">Excel</button>
+      <button class="tab active" id="btn-tab-inventario" onclick="showTab('inventario')">Conteo</button>
+      <button class="tab" id="btn-tab-alertas" onclick="showTab('alertas')">Alertas</button>
+      <button class="tab" id="btn-tab-importar" onclick="showTab('importar')">Excel</button>
     </div>
   </div>
 
   <div class="stats">
-    <div class="stat"><div class="stat-label">Total</div><div class="stat-val" id="st-total">0</div></div>
-    <div class="stat"><div class="stat-label">OK</div><div class="stat-val success" id="st-ok-val">0</div></div>
-    <div class="stat"><div class="stat-label">Sob.</div><div class="stat-val warn" id="st-low-val">0</div></div>
-    <div class="stat"><div class="stat-label">Fal.</div><div class="stat-val danger" id="st-out-val">0</div></div>
+    <div class="stat"><div class="stat-label">Productos</div><div class="stat-val" id="st-total">0</div></div>
+    <div class="stat"><div class="stat-label">Valor Total</div><div class="stat-val" id="st-valor">$0</div></div>
+    <div class="stat"><div class="stat-label">Stock Bajo</div><div class="stat-val warn" id="st-low">0</div></div>
+    <div class="stat"><div class="stat-label">Agotados</div><div class="stat-val danger" id="st-out">0</div></div>
   </div>
 
   <div id="sec-inventario" class="section active">
     <div class="toolbar">
-      <input type="text" id="search" placeholder="🔍 Buscar por nombre o código..." oninput="renderTable()">
-      <select id="cat-filter" onchange="renderTable()"><option value="">Todas las Categorías</option></select>
+      <input type="text" id="search" placeholder="🔍 Buscar producto o código..." oninput="renderTable()">
+      <div style="display: flex; gap: 6px;">
+        <select id="cat-filter" onchange="renderTable()"><option value="">Categorías</option></select>
+        <select id="stock-filter" onchange="renderTable()">
+          <option value="">Todos</option>
+          <option value="ok">Stock OK</option>
+          <option value="low">Stock bajo</option>
+          <option value="out">Agotado</option>
+        </select>
+      </div>
       <div class="btn-group">
-        <button class="btn btn-scan" onclick="startScanner()"><i class="ti ti-scan"></i> Abrir Escáner</button>
-        <button class="btn btn-secondary" onclick="openAdd()"><i class="ti ti-plus"></i> Manual</button>
+        <button class="btn-scan" onclick="startScanner()"><i class="ti ti-scan"></i> Escanear</button>
+        <button class="btn-primary" onclick="openAdd()"><i class="ti ti-plus"></i> Manual</button>
       </div>
     </div>
-    
     <div class="tbl-wrap">
       <table>
         <thead>
           <tr>
-            <th>Producto</th>
-            <th style="width:60px; text-align:center;">Exc</th>
-            <th style="width:105px; text-align:center;">Físico</th>
+            <th>Detalle</th>
+            <th style="width:70px; text-align:center;">Stock</th>
+            <th style="width:50px; text-align:center;">Edit</th>
           </tr>
         </thead>
         <tbody id="tbl-body"></tbody>
@@ -130,275 +138,224 @@
   </div>
 
   <div id="sec-alertas" class="section">
-    <div style="margin-bottom: 8px; font-size: 13px; color:#64748b;" id="report-summary"></div>
     <div id="alert-list"></div>
   </div>
 
   <div id="sec-importar" class="section">
     <div class="upload-zone" onclick="document.getElementById('file-in').click()">
-      <i class="ti ti-file-spreadsheet" style="font-size:32px; color:#64748b; margin-bottom:4px; display:block;"></i>
-      <p style="font-size:14px; color:#1e293b;"><b>Subir Excel Base (.xlsx)</b></p>
+      <i class="ti ti-file-spreadsheet" style="font-size:32px; color:var(--color-text-secondary); display:block; margin-bottom:6px;"></i>
+      <p><b>Seleccionar archivo de Excel</b></p>
+      <p style="font-size:12px; color:var(--color-text-secondary); margin-top:4px;">Columnas: código, producto, categoría, stock, stock_mínimo, precio</p>
     </div>
     <input type="file" id="file-in" accept=".xlsx,.xls" style="display:none" onchange="importExcel(this)">
-    <div id="import-msg" style="margin-top:8px;"></div>
-    
-    <div style="margin-top:1.5rem; background:#fff; padding:12px; border-radius:10px; border:1px solid #e2e8f0;">
-      <h4 style="color:#ef4444; font-size:13px; margin-bottom:4px;"><i class="ti ti-alert-triangle"></i> Zona de Peligro</h4>
-      <p style="font-size:12px; color:#64748b; margin-bottom:10px;">Limpia por completo los datos guardados en este teléfono para iniciar una auditoría nueva.</p>
-      <button class="btn btn-danger" style="width:100%" onclick="clearAuditor()">Vaciar Memoria Local</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-bg" id="modal-wrap" style="display:none" onclick="if(event.target===this)closeModal()">
-  <div class="modal">
-    <h3 id="modal-title">Registrar Unidades</h3>
-    <form id="modal-form" onsubmit="saveModal(event)">
-      <input type="hidden" id="m-id">
-      <div class="field"><label>Descripción del Artículo</label><input type="text" id="m-name"></div>
-      <div class="field" style="display:none"><input type="text" id="m-code"><input type="text" id="m-cat"></div>
-      <div class="field"><label>Unidades en Excel (Teórico)</label><input type="number" id="m-stock" value="0"></div>
-      
-      <div style="margin-top:10px; margin-bottom:4px;"><label style="font-size:11px; font-weight:600; color:#475569;">UBICACIÓN ACTUAL:</label></div>
-      <div class="location-toggle">
-        <button type="button" class="loc-btn active percha" id="loc-percha-btn" onclick="selectLocation('percha')"><i class="ti ti-browser"></i> Percha (Defecto)</button>
-        <button type="button" class="loc-btn bodega" id="loc-bodega-btn" onclick="selectLocation('bodega')"><i class="ti ti-building-warehouse"></i> Bodega (Manual)</button>
-      </div>
-      <input type="hidden" id="m-selected-loc" value="percha">
-
-      <div class="field" style="background: #f5f3ff; padding: 10px; border-radius: 8px; border: 1px solid #ddd6fe;">
-        <label id="input-qty-label" style="color:#4f46e5; font-weight: bold; font-size:11px;">CANTIDAD EN PERCHA</label>
-        <input type="number" id="m-real" value="" placeholder="¿Cuántos contaste?" required style="border-color:#4f46e5; font-size:16px; font-weight:bold; margin-top:2px;" inputmode="numeric">
-      </div>
-      
-      <div style="font-size:11px; color:#64748b; margin-top:6px; text-align:center;" id="modal-summary-preview">Total Físico: 0</div>
-      <div class="modal-btns">
-        <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
-        <button type="submit" class="btn btn-primary">Grabar</button>
-      </div>
-    </form>
+    <div id="import-msg" style="margin-top:10px;"></div>
   </div>
 </div>
 
 <div class="scanner-modal" id="scanner-modal" style="display:none">
-  <div style="color: #fff; font-size: 14px; font-weight:500;">Escaneando código de barras...</div>
+  <div class="scan-label">Coloca el código de barras frente a la cámara</div>
   <div class="scanner-box">
     <video id="scan-video" autoplay playsinline muted></video>
     <div class="scan-overlay"><div class="scan-frame"><div class="scan-line"></div></div></div>
   </div>
-  <button class="btn btn-danger" style="width: 100%; max-width: 260px;" onclick="stopScanner()">Cerrar Cámara</button>
+  <div id="scan-status" style="color:#fff; font-size:13px; text-align:center; min-height:20px;"></div>
+  <div id="scan-result-area"></div>
+  <button class="btn-close-scan" onclick="stopScanner()">Apagar Escáner</button>
+</div>
+
+<div class="modal-bg" id="modal-wrap" style="display:none" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <h3 id="modal-title">Editar Producto</h3>
+    <div class="field"><label>Código de barras</label><input type="text" id="m-code"></div>
+    <div class="field"><label>Producto / Descripción</label><input type="text" id="m-name"></div>
+    <div class="field"><label>Categoría</label><input type="text" id="m-cat"></div>
+    <div class="field"><label>Stock Actual</label><input type="number" id="m-stock" min="0"></div>
+    <div class="field"><label>Stock Mínimo</label><input type="number" id="m-min" min="0"></div>
+    <div class="field"><label>Precio de Venta</label><input type="number" id="m-price" min="0" step="0.01"></div>
+    <div class="modal-btns">
+      <button class="btn-edit" onclick="closeModal()">Cancelar</button>
+      <button class="btn-primary" onclick="saveModal()">Guardar</button>
+    </div>
+  </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.19.1/umd/index.min.js"></script>
 <script>
-let products = JSON.parse(localStorage.getItem('audit_iphone_final_v1')) || [];
+let products = JSON.parse(localStorage.getItem('cris_inventory_v2')) || [
+  {id:1,code:'7501055303517',name:'Labial Mate Cris',cat:'Cosméticos',stock:15,min:5,price:4.50},
+  {id:2,code:'7501055303518',name:'Base Líquida HD',cat:'Rostro',stock:3,min:5,price:12.00}
+];
 let nextId = products.length ? Math.max(...products.map(p=>p.id)) + 1 : 1;
-let currentStatFilter = 'all'; 
+let editId = null;
 let codeReader = null;
-let currentEditingProduct = null;
 
-function saveToStorage() { localStorage.setItem('audit_iphone_final_v1', JSON.stringify(products)); }
-function getTotalReal(p) { return (parseInt(p.percha) || 0) + (parseInt(p.bodega) || 0); }
-function status(p){
-  const r = getTotalReal(p);
-  return r === p.stock ? 'ok' : r > p.stock ? 'low' : 'out'; 
+function saveToStorage() { localStorage.setItem('cris_inventory_v2', JSON.stringify(products)); }
+function status(p){ return p.stock === 0 ? 'out' : p.stock <= p.min ? 'low' : 'ok'; }
+function badgeHtml(s){ 
+  const m = { ok: ['badge-ok','OK'], low: ['badge-low','Bajo'], out: ['badge-out','Agotado'] };
+  return `<span class="badge ${m[s][0]}">${m[s][1]}</span>`;
 }
 
 function updateStats(){
   document.getElementById('st-total').textContent = products.length;
-  document.getElementById('st-ok-val').textContent = products.filter(p=>status(p)==='ok').length;
-  document.getElementById('st-low-val').textContent = products.filter(p=>status(p)==='low').length;
-  document.getElementById('st-out-val').textContent = products.filter(p=>status(p)==='out').length;
+  document.getElementById('st-valor').textContent = '$' + products.reduce((a,p)=>a+p.stock*p.price,0).toFixed(2);
+  document.getElementById('st-low').textContent = products.filter(p=>status(p)==='low').length;
+  document.getElementById('st-out').textContent = products.filter(p=>status(p)==='out').length;
 }
 
 function updateCatFilter(){
   const sel = document.getElementById('cat-filter');
   const prev = sel.value;
   const cats = [...new Set(products.map(p=>p.cat))].sort();
-  sel.innerHTML = '<option value="">Todas las Categorías</option>' + cats.map(c=>`<option value="${c}">${c}</option>`).join('');
+  sel.innerHTML = '<option value="">Categorías</option>' + cats.map(c=>`<option value="${c}">${c}</option>`).join('');
   sel.value = prev;
 }
 
 function renderTable(){
   const q = document.getElementById('search').value.toLowerCase();
   const cat = document.getElementById('cat-filter').value;
-  let rows = products.filter(p => (!q || p.name.toLowerCase().includes(q) || p.code.toLowerCase().includes(q)) && (!cat || p.cat === cat));
+  const sf = document.getElementById('stock-filter').value;
+  
+  let rows = products.filter(p => {
+    return (!q || p.name.toLowerCase().includes(q) || p.code.toLowerCase().includes(q)) && (!cat || p.cat === cat) && (!sf || status(p) === sf);
+  });
+  
   const tbody = document.getElementById('tbl-body');
+  if(!rows.length){ tbody.innerHTML = `<tr><td colspan="3" class="empty">Sin productos coincidentes.</td></tr>`; return; }
   
-  if(!products.length){ tbody.innerHTML = `<tr><td colspan="3" class="empty">No hay artículos cargados. Ve a la sección de "Excel".</td></tr>`; return; }
-  if(!rows.length){ tbody.innerHTML = `<tr><td colspan="3" class="empty">Sin coincidencias.</td></tr>`; return; }
-  
-  tbody.innerHTML = rows.map(p => {
-    const r = getTotalReal(p);
-    const d = r - p.stock;
-    return `<tr onclick="openEditWithData(${p.id})">
-      <td>
-        <div style="font-weight:600; color:#1e293b; font-size:13px;">${p.name}</div>
-        <div style="font-size:11px; color:#64748b; font-family:monospace;">${p.code}</div>
-      </td>
-      <td style="text-align:center; color:#64748b; font-weight:500;">${p.stock}</td>
-      <td style="text-align:center;">
-        <span style="font-weight:700; color:#0f172a;">${r}</span>
-        <span style="color:${d===0?'#16a34a':d>0?'#2563eb':'#dc2626'}; font-size:11px; font-weight:700;">(${d===0?'=':(d>0?'+'+d:d)})</span>
-        <span class="sub-units">🛒P: ${p.percha} | 📦B: ${p.bodega}</span>
-      </td>
-    </tr>`;
-  }).join('');
+  tbody.innerHTML = rows.map(p => `<tr>
+    <td>
+      <div style="font-weight:600; color:#1e293b;">${p.name}</div>
+      <div style="font-size:11px; color:#64748b; font-family:monospace;">${p.code} | $${p.price.toFixed(2)}</div>
+    </td>
+    <td style="text-align:center;">
+      <div style="font-weight:700;">${p.stock}</div>
+      <div>${badgeHtml(status(p))}</div>
+    </td>
+    <td style="text-align:center;">
+      <button class="btn-edit" onclick="openEdit(${p.id})"><i class="ti ti-edit"></i></button>
+    </td>
+  </tr>`).join('');
 }
 
 function renderAlerts(){
-  const descuadres = products.filter(p => status(p) !== 'ok');
+  const low = products.filter(p => status(p) !== 'ok');
   const el = document.getElementById('alert-list');
-  if(!descuadres.length){ el.innerHTML = '<div class="empty">¡Perfecto! Todo coincide con el Excel.</div>'; return; }
-  el.innerHTML = descuadres.map(p => {
-    const sob = status(p) === 'low';
-    const diff = Math.abs(getTotalReal(p) - p.stock);
-    return `<div class="alert-card" style="border-left:4px solid ${sob?'#2563eb':'#dc2626'}" onclick="openEditWithData(${p.id})">
-      <div style="flex:1">
-        <div style="font-size:13px; font-weight:600;">${p.name}</div>
-        <div style="font-size:11px; color:#64748b;">Excel: ${p.stock} | Conteo: ${getTotalReal(p)}</div>
-      </div>
-      <span class="badge ${sob?'badge-sob':'badge-fal'}">${sob?'Sob':'Fal'} (${diff})</span>
-    </div>`;
-  }).join('');
+  if(!low.length){ el.innerHTML = '<div class="empty">🎉 Todo el stock está al día.</div>'; return; }
+  el.innerHTML = low.map(p => `<div class="alert-card" style="border-left: 4px solid ${status(p)==='out'?'#b91c1c':'#b45309'}">
+    <div style="flex:1">
+      <div style="font-weight:600;">${p.name}</div>
+      <div style="font-size:12px; color:#64748b;">Código: ${p.code} | Stock actual: ${p.stock} uds (Mín: ${p.min})</div>
+    </div>
+    <button class="btn-edit" onclick="openEdit(${p.id}); showTab('inventario');">Surtir</button>
+  </div>`).join('');
 }
 
 function showTab(t){
   document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-'+t).classList.add('active');
+  document.getElementById('btn-tab-'+t).classList.add('active');
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById('sec-'+t).classList.add('active');
-  if(t === 'alertas') renderAlerts();
-}
-
-function selectLocation(loc) {
-  if(!currentEditingProduct) return;
-  const oldLoc = document.getElementById('m-selected-loc').value;
-  currentEditingProduct[oldLoc] = Math.max(0, parseInt(document.getElementById('m-real').value) || 0);
-  document.getElementById('m-selected-loc').value = loc;
-  document.querySelectorAll('.loc-btn').forEach(b => b.classList.remove('active'));
-  
-  if(loc === 'percha') {
-    document.getElementById('loc-percha-btn').classList.add('active');
-    document.getElementById('input-qty-label').textContent = "CANTIDAD EN PERCHA";
-    document.getElementById('m-real').value = currentEditingProduct.percha || '';
-  } else {
-    document.getElementById('loc-bodega-btn').classList.add('active');
-    document.getElementById('input-qty-label').textContent = "CANTIDAD EN BODEGA";
-    document.getElementById('m-real').value = currentEditingProduct.bodega || '';
-  }
-  updateModalSummaryPreview();
-}
-
-function updateModalSummaryPreview() {
-  if(!currentEditingProduct) return;
-  const loc = document.getElementById('m-selected-loc').value;
-  const val = Math.max(0, parseInt(document.getElementById('m-real').value) || 0);
-  let p = currentEditingProduct.percha, b = currentEditingProduct.bodega;
-  if(loc === 'percha') p = val; if(loc === 'bodega') b = val;
-  document.getElementById('modal-summary-preview').innerHTML = `Físico Total: <b>${p + b} uds</b> (Percha: ${p} | Bodega: ${b})`;
-}
-document.getElementById('m-real').addEventListener('input', updateModalSummaryPreview);
-
-function openAdd(){
-  currentEditingProduct = { percha: 0, bodega: 0 };
-  document.getElementById('m-id').value = '';
-  document.getElementById('m-code').value = ''; document.getElementById('m-code').disabled = false;
-  document.getElementById('m-name').value = ''; document.getElementById('m-name').disabled = false;
-  document.getElementById('m-cat').value = '';
-  document.getElementById('m-stock').value = 0; document.getElementById('m-stock').disabled = false;
-  document.getElementById('m-real').value = '';
-  selectLocation('percha');
-  document.getElementById('modal-title').textContent = 'Registrar Producto Nuevo';
-  document.getElementById('modal-wrap').style.display = 'flex';
-}
-
-function openEditWithData(id) {
-  const p = products.find(x => x.id === id); if(!p) return;
-  currentEditingProduct = { ...p };
-  document.getElementById('m-id').value = p.id;
-  document.getElementById('m-code').value = p.code; document.getElementById('m-code').disabled = true;
-  document.getElementById('m-name').value = p.name; document.getElementById('m-name').disabled = true;
-  document.getElementById('m-stock').value = p.stock; document.getElementById('m-stock').disabled = true;
-  document.getElementById('m-real').value = p.percha;
-  selectLocation('percha');
-  document.getElementById('modal-title').textContent = p.name;
-  document.getElementById('modal-wrap').style.display = 'flex';
-}
-
-function closeModal(){ document.getElementById('modal-wrap').style.display='none'; }
-
-function saveModal(e){
-  e.preventDefault();
-  const id = document.getElementById('m-id').value;
-  const loc = document.getElementById('m-selected-loc').value;
-  currentEditingProduct[loc] = Math.max(0, parseInt(document.getElementById('m-real').value) || 0);
-  
-  if(id) {
-    const p = products.find(x => x.id == id);
-    if(p) { p.percha = currentEditingProduct.percha; p.bodega = currentEditingProduct.bodega; }
-  } else {
-    const name = document.getElementById('m-name').value.trim();
-    if(!name) return;
-    products.push({ id: nextId++, code: 'MAN-'+Date.now(), name, cat: 'General', stock: 0, percha: currentEditingProduct.percha, bodega: currentEditingProduct.bodega });
-  }
-  saveToStorage(); closeModal(); updateStats(); renderTable();
+  if(t==='alertas') renderAlerts();
 }
 
 async function startScanner(){
-  document.getElementById('scanner-modal').style.display='flex';
-  try{
+  document.getElementById('scanner-modal').style.display = 'flex';
+  document.getElementById('scan-result-area').innerHTML = '';
+  document.getElementById('scan-status').textContent = 'Iniciando cámara trasera...';
+  try {
     const hints = new Map();
-    hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS, [ZXing.BarcodeFormat.EAN_13, ZXing.BarcodeFormat.EAN_8, ZXing.BarcodeFormat.CODE_128]);
-    codeReader = new ZXing.BrowserMultiFormatReader(hints, 300);
-    const devices = await ZXing.BrowserMultiFormatReader.listVideoInputDevices();
-    const backCam = devices.find(d => /back|rear|environment/i.test(d.label)) || devices[devices.length-1] || devices[0];
+    hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS, [ZXing.BarcodeFormat.EAN_13, ZXing.BarcodeFormat.EAN_8, ZXing.BarcodeFormat.CODE_128, ZXing.BarcodeFormat.UPC_A]);
+    codeReader = new ZXing.BrowserMultiFormatReader(hints, 400);
     
-    await codeReader.decodeFromVideoDevice(backCam ? backCam.deviceId : undefined, 'scan-video', (result) => {
+    await codeReader.decodeFromVideoDevice(undefined, 'scan-video', (result) => {
       if(result){
         const code = result.getText();
-        stopScanner();
         const found = products.find(p => p.code === code);
-        if(found) openEditWithData(found.id);
-        else { openAdd(); document.getElementById('m-code').value = code; }
+        const area = document.getElementById('scan-result-area');
+        if(found){
+          area.innerHTML = `<div class="scan-result-box">
+            <div style="font-weight:700; font-size:15px;">${found.name}</div>
+            <div style="font-size:13px; color:#475569; margin:4px 0;">Stock Actual: ${found.stock} unidades</div>
+            <button class="btn-primary" style="width:100%; margin-top:6px;" onclick="stopScanner(); openEdit(${found.id})">Modificar Stock</button>
+          </div>`;
+          document.getElementById('scan-status').textContent = '✓ Producto Encontrado';
+        } else {
+          area.innerHTML = `<div class="scan-result-box">
+            <div style="font-weight:700; color:#b91c1c;">Código Nuevo No Registrado</div>
+            <div style="font-size:13px; font-family:monospace; margin:4px 0;">N°: ${code}</div>
+            <button class="btn-scan" style="width:100%; margin-top:6px;" onclick="stopScanner(); openAddWithCode('${code}')">Registrar Nuevo</button>
+          </div>`;
+          document.getElementById('scan-status').textContent = 'Código leído';
+        }
       }
     });
-  } catch(e) { alert('Permiso de cámara denegado o no compatible.'); stopScanner(); }
+  } catch(e) {
+    document.getElementById('scan-status').textContent = 'Error de acceso. Ábrelo desde Google Chrome.';
+  }
 }
 
 function stopScanner(){
-  document.getElementById('scanner-modal').style.display='none';
+  document.getElementById('scanner-modal').style.display = 'none';
   if(codeReader){ try{ codeReader.reset(); }catch(e){} codeReader=null; }
+}
+
+function openEdit(id){
+  editId = id;
+  const p = products.find(x => x.id === id);
+  document.getElementById('modal-title').textContent = 'Editar Producto';
+  document.getElementById('m-code').value = p.code;
+  document.getElementById('m-name').value = p.name;
+  document.getElementById('m-cat').value = p.cat;
+  document.getElementById('m-stock').value = p.stock;
+  document.getElementById('m-min').value = p.min;
+  document.getElementById('m-price').value = p.price;
+  document.getElementById('modal-wrap').style.display = 'flex';
+}
+
+function openAdd(){ editId = null; document.getElementById('modal-title').textContent = 'Agregar Producto'; ['m-code','m-name','m-cat','m-stock','m-min','m-price'].forEach(id=>document.getElementById(id).value=''); document.getElementById('modal-wrap').style.display='flex'; }
+function openAddWithCode(code){ openAdd(); document.getElementById('m-code').value = code; }
+define=null; function closeModal(){ document.getElementById('modal-wrap').style.display='none'; }
+
+function saveModal(){
+  const name = document.getElementById('m-name').value.trim();
+  if(!name){ alert('Ingresa la descripción del producto'); return; }
+  const code = document.getElementById('m-code').value.trim() || 'REG-'+Date.now();
+  const cat = document.getElementById('m-cat').value.trim() || 'General';
+  const stock = parseInt(document.getElementById('m-stock').value) || 0;
+  const min = parseInt(document.getElementById('m-min').value) || 0;
+  const price = parseFloat(document.getElementById('m-price').value) || 0;
+  
+  if(editId){ Object.assign(products.find(x=>x.id===editId), {code, name, cat, stock, min, price}); }
+  else { products.push({id:nextId++, code, name, cat, stock, min, price}); }
+  
+  saveToStorage(); closeModal(); updateCatFilter(); updateStats(); renderTable();
 }
 
 function importExcel(inp){
   const file = inp.files[0]; if(!file) return;
   const reader = new FileReader();
   reader.onload = function(e){
-    try{
+    try {
       const wb = XLSX.read(e.target.result, {type:'array'});
       const data = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {defval:''});
       products = [];
       data.forEach(row => {
-        const name = row['producto'] || row['Producto'] || row['PRODUCTO'] || row['nombre'] || '';
+        const name = row['producto'] || row['Producto'] || row['PRODUCTO'] || '';
         if(!name) return;
-        const stock = parseInt(row['stock_teórico'] || row['stock_teorico'] || row['stock'] || 0);
-        const code = String(row['código'] || row['codigo'] || 'REG-'+Math.floor(Math.random()*100000));
-        products.push({ id: nextId++, code, name, cat: String(row['categoría'] || 'General'), stock, percha: 0, bodega: 0 });
+        const code = String(row['código'] || row['codigo'] || 'EAN-'+Math.floor(Math.random()*100000));
+        const cat = String(row['categoría'] || row['categoria'] || 'General');
+        const stock = parseInt(row['stock'] || 0);
+        const min = parseInt(row['stock_mínimo'] || row['stock_minimo'] || 0);
+        const price = parseFloat(row['precio'] || 0);
+        products.push({id:nextId++, code, name, cat, stock, min, price});
       });
       saveToStorage(); updateCatFilter(); updateStats(); renderTable(); showTab('inventario');
-      document.getElementById('import-msg').innerHTML = `<p style="color:#16a34a; font-size:13px; font-weight:600;">✅ ${products.length} productos cargados con éxito.</p>`;
-    }catch(err){ alert('Error al procesar el Excel.'); }
+      document.getElementById('import-msg').innerHTML = `<p style="color:#15803d; font-size:13px; font-weight:600;">✅ ${products.length} productos cargados con éxito.</p>`;
+    } catch(err) { alert('Error al procesar el archivo Excel.'); }
   };
   reader.readAsArrayBuffer(file);
-}
-
-function clearAuditor(){
-  if(confirm("¿Seguro que deseas borrar el inventario de este iPhone?")){
-    products = []; localStorage.removeItem('audit_iphone_final_v1');
-    updateStats(); renderTable(); updateCatFilter();
-  }
 }
 
 updateCatFilter(); updateStats(); renderTable();
