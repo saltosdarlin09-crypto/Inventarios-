@@ -391,7 +391,10 @@ async function loadFromFirestore() {
     const colRef = window._fsCollection(window._db, COLLECTION);
     const snap = await window._fsGetDocs(colRef);
     if (!snap.empty) {
-      products = snap.docs.map(d => d.data());
+      products = snap.docs.map(d => ({
+  ...d.data(),
+  id: parseInt(d.id) || d.data().id
+}));
       nextId = products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
     } else {
       // Migrar datos locales a Firestore si existen
@@ -415,7 +418,10 @@ function listenFirestore() {
   const colRef = window._fsCollection(window._db, COLLECTION);
   window._fsOnSnapshot(colRef, snap => {
     if (snap.empty) return;
-    const incoming = snap.docs.map(d => d.data());
+    const incoming = snap.docs.map(d => ({
+  ...d.data(),
+  id: parseInt(d.id) || d.data().id
+}));
     // Actualizar solo si hay cambios reales (evitar loop)
     const currentJSON = JSON.stringify(products.sort((a,b)=>a.id-b.id));
     const incomingJSON = JSON.stringify(incoming.sort((a,b)=>a.id-b.id));
@@ -766,7 +772,7 @@ function stopScanner(){
 async function importExcel(inp){
   const file = inp.files[0]; if(!file) return;
   const reader = new FileReader();
-  reader.onload = function(e){
+  reader.onload = async function(e){
     try{
       const wb = XLSX.read(e.target.result, {type:'array'});
       const data = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {defval:'0', raw:false});
