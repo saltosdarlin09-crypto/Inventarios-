@@ -399,7 +399,7 @@ async function loadFromFirestore() {
       if (local.length) {
         products = local;
         nextId = Math.max(...products.map(p => p.id)) + 1;
-        await saveToStorage(); // sube los datos locales
+        await await saveToStorage(); // sube los datos locales
       }
     }
   } catch (e) {
@@ -737,7 +737,7 @@ function saveModal(e){
       isCountedMarked: true, countedBy: currentUser 
     });
   }
-  saveToStorage(); closeModal(); updateStats(); renderTable(); updateCatFilter();
+  await saveToStorage(); closeModal(); updateStats(); renderTable(); updateCatFilter();
 }
  
 async function startScanner(){
@@ -789,7 +789,7 @@ function importExcel(inp){
         products.push({ id: nextId++, code, name, cat: subFamilia, stock, percha: 0, bodega: 0, isCountedMarked: false, countedBy: '' });
       });
       
-      saveToStorage(); updateCatFilter(); updateStats(); renderTable(); showTab('inventario');
+      await saveToStorage(); updateCatFilter(); updateStats(); renderTable(); showTab('inventario');
       document.getElementById('import-msg').innerHTML = `<p style="color:#16a34a; font-size:13px; font-weight:600;">✅ Éxito: ${products.length} productos cargados correctamente.</p>`;
     }catch(err){ alert('Error al interpretar el archivo de Excel.'); }
   };
