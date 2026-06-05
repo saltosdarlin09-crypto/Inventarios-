@@ -1,3 +1,5 @@
+raw
+Index · HTML
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -397,7 +399,7 @@ async function loadFromFirestore() {
       if (local.length) {
         products = local;
         nextId = Math.max(...products.map(p => p.id)) + 1;
-        await await saveToStorage(); // sube los datos locales
+        await saveToStorage(); // sube los datos locales
       }
     }
   } catch (e) {
@@ -457,7 +459,6 @@ function logout() {
   }
 }
  
-function saveToStorage() { localStorage.setItem('audit_droid_v2', JSON.stringify(products)); }
 function getTotalReal(p) { return (parseInt(p.percha) || 0) + (parseInt(p.bodega) || 0); }
 function hasBeenCounted(p) { return p.percha !== 0 || p.bodega !== 0 || p.isCountedMarked === true; }
  
@@ -711,7 +712,7 @@ function openEditWithData(id) {
  
 function closeModal(){ document.getElementById('modal-wrap').style.display='none'; currentCode = ''; }
  
-function saveModal(e){
+async function saveModal(e){
   e.preventDefault();
   const id = document.getElementById('m-id').value;
   const loc = document.getElementById('m-selected-loc').value;
@@ -762,7 +763,7 @@ function stopScanner(){
   if(codeReader){ try{ codeReader.reset(); }catch(e){} codeReader=null; }
 }
  
-function importExcel(inp){
+async function importExcel(inp){
   const file = inp.files[0]; if(!file) return;
   const reader = new FileReader();
   reader.onload = function(e){
@@ -817,6 +818,7 @@ async function init() {
   await loadFromFirestore();
   listenFirestore();
   checkAuth();
+  window._firebaseInitDone = true;
 }
  
 if (window._firebaseReady) {
@@ -832,7 +834,6 @@ if (window._firebaseReady) {
     }
   }, 3000);
 }
-window._firebaseInitDone = true;
 </script>
 </body>
 </html>
