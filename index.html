@@ -1,5 +1,3 @@
-raw
-Index · HTML
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -38,7 +36,7 @@ Index · HTML
     .stat-val.success { color: #16a34a; }
     .stat-val.warn { color: #2563eb; }
     .stat-val.danger { color: #dc2626; }
- 
+
     /* CONTENEDOR DE LA BARRA DE PORCENTAJE */
     .progress-container { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px; margin-bottom: 12px; }
     .progress-info { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 6px; text-transform: uppercase; }
@@ -59,20 +57,20 @@ Index · HTML
     .f-btn.active.f-ok { background: #16a34a; border-color: #16a34a; }
     .f-btn.active.f-sob { background: #2563eb; border-color: #2563eb; }
     .f-btn.active.f-fal { background: #dc2626; border-color: #dc2626; }
- 
+
     .btn { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 4px; padding: 12px; font-size: 13px; font-weight: 600; border-radius: 8px; border: 1px solid transparent; cursor: pointer; }
     .btn-primary { background: #4f46e5; color: #fff; }
     .btn-scan { background: #10b981; color: #fff; }
     .btn-danger { background: #ef4444; color: #fff; }
     .btn-secondary { background: #fff; border-color: #cbd5e1; color: #475569; }
     .btn-excel { background: #15803d; color: #fff; width: 100%; padding: 14px; font-size: 14px; margin-bottom: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
- 
+
     .location-toggle { display: flex; background: #f1f5f9; padding: 4px; border-radius: 8px; margin-bottom: 12px; border: 1px solid #cbd5e1; }
     .loc-btn { flex: 1; padding: 10px 4px; border: none; background: none; border-radius: 6px; font-weight: 600; font-size: 12px; color: #64748b; display: flex; align-items: center; justify-content: center; gap: 4px; }
     .loc-btn.active { background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.08); }
     .loc-btn.active.percha { color: #4f46e5; }
     .loc-btn.active.bodega { color: #ea580c; }
- 
+
     .tbl-wrap { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; }
     table { width: 100%; border-collapse: collapse; font-size: 14px; }
     th { text-align: left; padding: 8px 10px; font-weight: 600; font-size: 11px; color: #64748b; border-bottom: 1px solid #e2e8f0; background: #f8fafc; }
@@ -88,7 +86,7 @@ Index · HTML
     
     .section { display: none; } .section.active { display: block; }
     .empty { text-align: center; padding: 2rem 1rem; color: #64748b; font-size: 13px; }
- 
+
     /* Modales */
     .modal-bg { position: fixed; inset: 0; background: rgba(15,23,42,0.6); z-index: 8000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); padding: 12px; }
     .modal { background: #fff; border-radius: 14px; padding: 16px; width: 100%; max-width: 360px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.15); }
@@ -98,7 +96,7 @@ Index · HTML
     .field input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 14px; }
     .field input:disabled { background: #f1f5f9; color: #64748b; }
     .modal-btns { display: flex; gap: 8px; margin-top: 14px; }
- 
+
     /* Escáner */
     .scanner-modal { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 30px 20px; }
     .scanner-box { position: relative; width: 100%; max-width: 320px; aspect-ratio: 1/1; background: #000; border-radius: 16px; overflow: hidden; }
@@ -107,7 +105,7 @@ Index · HTML
     .scan-frame { width: 85%; aspect-ratio: 2.3/1; border: 2px solid #10b981; border-radius: 8px; position: relative; box-shadow: 0 0 0 9999px rgba(0,0,0,0.6); }
     .scan-line { position: absolute; left: 0; right: 0; height: 3px; background: #10b981; animation: scanline 1.8s linear infinite; }
     @keyframes scanline { 0% { top: 0% } 50% { top: 100% } 100% { top: 0% } }
- 
+
     .upload-zone { border: 2px dashed #cbd5e1; background: #fff; border-radius: 12px; padding: 1.5rem 1rem; text-align: center; cursor: pointer; }
     .excel-format-box { background: #f8fafc; border-radius: 10px; border: 1px solid #cbd5e1; padding: 12px; margin-top: 12px; }
     .excel-table { width: 100%; border-collapse: collapse; font-family: monospace; font-size: 11px; margin-top: 6px; }
@@ -116,7 +114,7 @@ Index · HTML
   </style>
 </head>
 <body>
- 
+
 <!-- PANTALLA DE INGRESO DE NOMBRE OBLIGATORIO -->
 <div class="login-screen" id="sec-login">
   <div class="logo-icon"><i class="ti ti-user-check"></i></div>
@@ -129,7 +127,7 @@ Index · HTML
     <button type="submit" class="btn btn-primary" style="width:100%; padding:12px; font-size:14px;">Entrar al Sistema</button>
   </form>
 </div>
- 
+
 <!-- APLICACIÓN PRINCIPAL -->
 <div class="app" id="main-app-layout">
   <div class="topbar">
@@ -145,14 +143,14 @@ Index · HTML
       <button class="tab" id="tab-importar" onclick="showTab('importar')">Excel</button>
     </div>
   </div>
- 
+
   <div class="stats">
     <div class="stat"><div class="stat-label">Total</div><div class="stat-val" id="st-total">0</div></div>
     <div class="stat"><div class="stat-label">OK</div><div class="stat-val success" id="st-ok-val">0</div></div>
     <div class="stat"><div class="stat-label">Sob.</div><div class="stat-val warn" id="st-low-val">0</div></div>
     <div class="stat"><div class="stat-label">Fal.</div><div class="stat-val danger" id="st-out-val">0</div></div>
   </div>
- 
+
   <!-- COMPONENTE VISUAL: BARRA DE PORCENTAJE DE AVANCE -->
   <div class="progress-container">
     <div class="progress-info">
@@ -166,7 +164,7 @@ Index · HTML
       0 de 0 artículos controlados
     </div>
   </div>
- 
+
   <div id="sec-inventario" class="section active">
     <div class="toolbar">
       <input type="text" id="search" placeholder="🔍 Buscar producto o código..." oninput="renderTable()">
@@ -175,12 +173,12 @@ Index · HTML
         <button class="btn btn-scan" onclick="startScanner()"><i class="ti ti-scan"></i> Escanear</button>
         <button class="btn btn-secondary" onclick="openAdd()"><i class="ti ti-plus"></i> Manual</button>
       </div>
- 
+
       <div class="filter-row">
         <div class="filter-label">Familias:</div>
         <div class="filter-buttons" id="btn-group-cats"></div>
       </div>
- 
+
       <div class="filter-row">
         <div class="filter-label">Avance Conteo:</div>
         <div class="filter-buttons">
@@ -189,7 +187,7 @@ Index · HTML
           <button class="f-btn" id="f-prog-pending" onclick="setFilter('progress', 'pending')">Faltan Contar</button>
         </div>
       </div>
- 
+
       <div class="filter-row">
         <div class="filter-label">Estados de Cuadre:</div>
         <div class="filter-buttons">
@@ -214,7 +212,7 @@ Index · HTML
       </table>
     </div>
   </div>
- 
+
   <div id="sec-alertas" class="section">
     <button class="btn btn-excel" id="btn-export-excel" onclick="exportAuditExcel()">
       <i class="ti ti-download-sheet"></i> Descargar Todo lo Contado (.xlsx)
@@ -222,7 +220,7 @@ Index · HTML
     <div style="margin-bottom: 10px; font-size: 13px; color:#475569; font-weight: 500;" id="report-summary"></div>
     <div id="alert-list"></div>
   </div>
- 
+
   <div id="sec-importar" class="section">
     <div class="upload-zone" onclick="document.getElementById('file-in').click()">
       <i class="ti ti-file-spreadsheet" style="font-size:32px; color:#10b981; margin-bottom:4px; display:block;"></i>
@@ -265,7 +263,7 @@ Index · HTML
     </div>
   </div>
 </div>
- 
+
 <!-- FORMULARIO DE CONTEO MODAL -->
 <div class="modal-bg" id="modal-wrap" style="display:none" onclick="if(event.target===this)closeModal()">
   <div class="modal">
@@ -282,7 +280,7 @@ Index · HTML
         <button type="button" class="loc-btn bodega" id="loc-bodega-btn" onclick="selectLocation('bodega')"><i class="ti ti-building-warehouse"></i> Bodega</button>
       </div>
       <input type="hidden" id="m-selected-loc" value="percha">
- 
+
       <div class="field" style="background: #f5f3ff; padding: 10px; border-radius: 8px; border: 1px solid #ddd6fe;">
         <label id="input-qty-label" style="color:#4f46e5; font-weight: bold; font-size:11px;">CANTIDAD EN PERCHA</label>
         <input type="number" id="m-real" value="" placeholder="Ingresa las unidades..." required style="border-color:#4f46e5; font-size:16px; font-weight:bold; margin-top:2px;" inputmode="numeric">
@@ -296,7 +294,7 @@ Index · HTML
     </form>
   </div>
 </div>
- 
+
 <!-- ESCÁNER MODAL -->
 <div class="scanner-modal" id="scanner-modal" style="display:none">
   <div style="color: #fff; font-size: 14px;">Coloca el código de barras frente a la cámara</div>
@@ -306,15 +304,22 @@ Index · HTML
   </div>
   <button class="btn btn-danger" style="width: 100%; max-width: 250px;" onclick="stopScanner()">Apagar Escáner</button>
 </div>
- 
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.19.1/umd/index.min.js"></script>
- 
-<!-- Firebase SDK -->
+<script>
+window.firebaseAuthReady = new Promise((resolve, reject) => {
+  window.__resolveFirebaseAuthReady = resolve;
+  window.__rejectFirebaseAuthReady = reject;
+});
+window.firebaseReady = window.firebaseAuthReady;
+</script>
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getFirestore, collection, getDocs, setDoc, deleteDoc, doc, onSnapshot, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
- 
+  import { initializeApp as initializeFirebaseApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-analytics.js";
+  import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+  import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+
   const firebaseConfig = {
     apiKey: "AIzaSyCcdKrWw2idAfFwdcSzXKhxLfLgasA0nIQ",
     authDomain: "inventarios-local.firebaseapp.com",
@@ -324,117 +329,118 @@ Index · HTML
     appId: "1:1004193873972:web:8777d840a54d25a02cca61",
     measurementId: "G-JVE6PY9K40"
   };
- 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
- 
-  // Exponer db y funciones de Firestore al scope global
-  window._db = db;
-  window._fsCollection = collection;
-  window._fsDoc = doc;
-  window._fsSetDoc = setDoc;
-  window._fsDeleteDoc = deleteDoc;
-  window._fsGetDocs = getDocs;
-  window._fsWriteBatch = writeBatch;
-  window._fsOnSnapshot = onSnapshot;
- 
-  // Señal para que el script principal sepa que Firebase está listo
-  window._firebaseReady = true;
-  document.dispatchEvent(new Event('firebase-ready'));
+
+  try {
+    const app = initializeFirebaseApp(firebaseConfig);
+    try {
+      getAnalytics(app);
+    } catch (analyticsError) {
+      console.warn("Firebase Analytics no se pudo inicializar. Firestore sigue disponible.", analyticsError);
+    }
+
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+    const inventoryDocRef = doc(db, "auditorias", "inventario_actual");
+    let authReadySettled = false;
+    let anonymousSignInStarted = false;
+
+    onAuthStateChanged(auth, async (user) => {
+      try {
+        if (authReadySettled) return;
+
+        if (user) {
+          authReadySettled = true;
+          console.log("Firebase Auth listo. UID:", user.uid);
+          window.__resolveFirebaseAuthReady(user);
+          return;
+        }
+
+        if (anonymousSignInStarted) return;
+        anonymousSignInStarted = true;
+        const credential = await signInAnonymously(auth);
+        authReadySettled = true;
+        console.log("Sesion anonima iniciada. UID:", credential.user.uid);
+        window.__resolveFirebaseAuthReady(credential.user);
+      } catch (authError) {
+        if (!authReadySettled) {
+          authReadySettled = true;
+          console.error("Error en autenticacion anonima:", authError);
+          window.__rejectFirebaseAuthReady(authError);
+        }
+      }
+    }, (authError) => {
+      if (!authReadySettled) {
+        authReadySettled = true;
+        console.error("Error observando Firebase Auth:", authError);
+        window.__rejectFirebaseAuthReady(authError);
+      }
+    });
+
+    window.saveProductsToFirebase = async function(products, currentUser) {
+      const firebaseUser = await window.firebaseAuthReady;
+      await setDoc(inventoryDocRef, {
+        products: Array.isArray(products) ? products : [],
+        updatedAt: serverTimestamp(),
+        updatedAtLocal: new Date().toISOString(),
+        updatedBy: currentUser || "Sin usuario",
+        firebaseUid: firebaseUser.uid
+      });
+      console.log("Datos guardados en Firestore por UID:", firebaseUser.uid);
+    };
+
+    window.loadProductsFromFirebase = async function() {
+      const firebaseUser = await window.firebaseAuthReady;
+      const snapshot = await getDoc(inventoryDocRef);
+      if (!snapshot.exists()) {
+        console.log("No existe inventario_actual en Firestore. UID:", firebaseUser.uid);
+        return [];
+      }
+
+      const data = snapshot.data();
+      if (Array.isArray(data.products)) {
+        console.log(`Datos cargados desde Firestore por UID: ${firebaseUser.uid}. Productos: ${data.products.length}`);
+        return data.products;
+      }
+
+      console.warn("El documento de Firestore no tiene un arreglo products valido.");
+      return [];
+    };
+
+    window.clearProductsFromFirebase = async function(currentUser) {
+      const firebaseUser = await window.firebaseAuthReady;
+      await setDoc(inventoryDocRef, {
+        products: [],
+        updatedAt: serverTimestamp(),
+        updatedAtLocal: new Date().toISOString(),
+        updatedBy: currentUser || "Sin usuario",
+        firebaseUid: firebaseUser.uid,
+        cleared: true
+      });
+      console.log("Inventario limpiado en Firestore por UID:", firebaseUser.uid);
+    };
+
+    console.log("Firebase inicializado correctamente. Auth anonimo pendiente/listo.");
+  } catch (error) {
+    console.error("Error al inicializar Firebase o Firestore:", error);
+    if (window.__rejectFirebaseAuthReady) window.__rejectFirebaseAuthReady(error);
+  }
 </script>
- 
 <script>
-let products = [];
+let products = JSON.parse(localStorage.getItem('audit_droid_v2')) || [];
 let nextId = 1;
 let currentCode = '';
 let codeReader = null;
 let currentEditingProduct = null;
 let currentUser = localStorage.getItem('audit_active_user') || '';
- 
+
 let activeCategory = '';
 let activeProgress = '';
 let activeAudit = '';
- 
-// ── Firebase helpers ────────────────────────────────────────────────────────
-const COLLECTION = 'audit_droid_v2';
- 
-async function saveToStorage() {
-  // Guardar en localStorage como respaldo offline
-  localStorage.setItem('audit_droid_v2', JSON.stringify(products));
- 
-  // Guardar en Firestore si está disponible
-  if (!window._db) return;
-  try {
-    const batch = window._fsWriteBatch(window._db);
-    const colRef = window._fsCollection(window._db, COLLECTION);
- 
-    // Escribir cada producto
-    products.forEach(p => {
-      const docRef = window._fsDoc(window._db, COLLECTION, String(p.id));
-      batch.set(docRef, p);
-    });
- 
-    await batch.commit();
-  } catch (e) {
-    console.warn('Firestore write error:', e);
-  }
+
+function recalculateNextId() {
+  nextId = products.length ? Math.max(...products.map(p => Number(p.id) || 0)) + 1 : 1;
 }
- 
-async function loadFromFirestore() {
-  if (!window._db) {
-    // Fallback a localStorage
-    products = JSON.parse(localStorage.getItem('audit_droid_v2')) || [];
-    nextId = products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
-    return;
-  }
-  try {
-    const colRef = window._fsCollection(window._db, COLLECTION);
-    const snap = await window._fsGetDocs(colRef);
-    if (!snap.empty) {
-      products = snap.docs.map(d => ({
-  ...d.data(),
-  id: parseInt(d.id) || d.data().id
-}));
-      nextId = products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
-    } else {
-      // Migrar datos locales a Firestore si existen
-      const local = JSON.parse(localStorage.getItem('audit_droid_v2')) || [];
-      if (local.length) {
-        products = local;
-        nextId = Math.max(...products.map(p => p.id)) + 1;
-        await saveToStorage(); // sube los datos locales
-      }
-    }
-  } catch (e) {
-    console.warn('Firestore read error, using localStorage:', e);
-    products = JSON.parse(localStorage.getItem('audit_droid_v2')) || [];
-    nextId = products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
-  }
-}
- 
-// Escucha cambios en tiempo real de otros auditores
-function listenFirestore() {
-  if (!window._db) return;
-  const colRef = window._fsCollection(window._db, COLLECTION);
-  window._fsOnSnapshot(colRef, snap => {
-    if (snap.empty) return;
-    const incoming = snap.docs.map(d => ({
-  ...d.data(),
-  id: parseInt(d.id) || d.data().id
-}));
-    // Actualizar solo si hay cambios reales (evitar loop)
-    const currentJSON = JSON.stringify(products.sort((a,b)=>a.id-b.id));
-    const incomingJSON = JSON.stringify(incoming.sort((a,b)=>a.id-b.id));
-    if (currentJSON !== incomingJSON) {
-      products = incoming;
-      nextId = products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
-      localStorage.setItem('audit_droid_v2', JSON.stringify(products));
-      updateCatFilter(); updateStats(); renderTable();
-    }
-  });
-}
-// ── Fin Firebase helpers ────────────────────────────────────────────────────
- 
+
 function checkAuth() {
   if (currentUser) {
     document.getElementById('sec-login').style.display = 'none';
@@ -446,7 +452,7 @@ function checkAuth() {
     document.getElementById('main-app-layout').classList.remove('active');
   }
 }
- 
+
 function handleLogin(e) {
   e.preventDefault();
   const nameInput = document.getElementById('login-name').value.trim();
@@ -455,7 +461,7 @@ function handleLogin(e) {
   localStorage.setItem('audit_active_user', currentUser);
   checkAuth();
 }
- 
+
 function logout() {
   if (confirm("¿Quieres cerrar sesión o cambiar de auditor?")) {
     currentUser = '';
@@ -464,30 +470,45 @@ function logout() {
     checkAuth();
   }
 }
- 
+
+async function saveToStorage() {
+  localStorage.setItem('audit_droid_v2', JSON.stringify(products));
+
+  try {
+    if (window.saveProductsToFirebase) {
+      await window.saveProductsToFirebase(products, currentUser);
+      console.log("Datos guardados en localStorage y Firebase");
+    } else {
+      console.warn("Firebase todavia no esta disponible. Solo se guardo en localStorage.");
+    }
+  } catch (error) {
+    console.error("Error guardando en Firebase:", error);
+    alert("No se pudo guardar en Firebase. Revisa la consola del navegador.");
+  }
+}
 function getTotalReal(p) { return (parseInt(p.percha) || 0) + (parseInt(p.bodega) || 0); }
 function hasBeenCounted(p) { return p.percha !== 0 || p.bodega !== 0 || p.isCountedMarked === true; }
- 
+
 function status(p){
   const r = getTotalReal(p);
   return r === p.stock ? 'ok' : r > p.stock ? 'low' : 'out'; 
 }
- 
+
 function updateStats(){
   const totalItems = products.length;
   const countedItems = products.filter(p => hasBeenCounted(p)).length;
   const percentage = totalItems > 0 ? Math.round((countedItems / totalItems) * 100) : 0;
- 
+
   document.getElementById('progress-percentage-text').textContent = `${percentage}%`;
   document.getElementById('progress-bar-fill-element').style.width = `${percentage}%`;
   document.getElementById('progress-count-text').textContent = `${countedItems} de ${totalItems} artículos controlados`;
- 
+
   document.getElementById('st-total').textContent = totalItems;
   document.getElementById('st-ok-val').textContent = products.filter(p=>status(p)==='ok').length;
   document.getElementById('st-low-val').textContent = products.filter(p=>status(p)==='low').length;
   document.getElementById('st-out-val').textContent = products.filter(p=>status(p)==='out').length;
 }
- 
+
 function updateCatFilter(){
   const container = document.getElementById('btn-group-cats');
   const cats = [...new Set(products.map(p=>p.cat))].sort();
@@ -500,7 +521,7 @@ function updateCatFilter(){
   
   container.innerHTML = html;
 }
- 
+
 function setFilter(type, value) {
   if (type === 'category') {
     activeCategory = value;
@@ -523,7 +544,7 @@ function setFilter(type, value) {
   }
   renderTable();
 }
- 
+
 function renderTable(){
   const q = document.getElementById('search').value.toLowerCase();
   
@@ -566,7 +587,7 @@ function renderTable(){
     </tr>`;
   }).join('');
 }
- 
+
 function renderAlerts(){
   const el = document.getElementById('alert-list');
   const summaryEl = document.getElementById('report-summary');
@@ -590,7 +611,7 @@ function renderAlerts(){
     if(status(a) === 'ok' && status(b) !== 'ok') return 1;
     return 0;
   });
- 
+
   el.innerHTML = sortedProducts.map(p => {
     const stat = status(p);
     const diff = getTotalReal(p) - p.stock;
@@ -622,7 +643,7 @@ function renderAlerts(){
     </div>`;
   }).join('');
 }
- 
+
 function showTab(t){
   document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-'+t).classList.add('active');
@@ -630,7 +651,7 @@ function showTab(t){
   document.getElementById('sec-'+t).classList.add('active');
   if(t === 'alertas') renderAlerts();
 }
- 
+
 function exportAuditExcel() {
   if (!products.length) { alert("No hay datos para exportar."); return; }
   
@@ -661,7 +682,7 @@ function exportAuditExcel() {
   const fecha = new Date().toISOString().slice(0,10);
   XLSX.writeFile(wb, `Reporte_Auditoria_Completo_${fecha}.xlsx`);
 }
- 
+
 function selectLocation(loc) {
   if(!currentEditingProduct) return;
   const oldLoc = document.getElementById('m-selected-loc').value;
@@ -680,7 +701,7 @@ function selectLocation(loc) {
   }
   updateModalSummaryPreview();
 }
- 
+
 function updateModalSummaryPreview() {
   if(!currentEditingProduct) return;
   const loc = document.getElementById('m-selected-loc').value;
@@ -690,7 +711,7 @@ function updateModalSummaryPreview() {
   document.getElementById('modal-summary-preview').innerHTML = `Total Real: <b>${p + b} uds</b> (Percha: ${p} | Bodega: ${b})`;
 }
 document.getElementById('m-real').addEventListener('input', updateModalSummaryPreview);
- 
+
 function openAdd(){
   currentEditingProduct = { percha: 0, bodega: 0, isCountedMarked: true };
   document.getElementById('m-id').value = '';
@@ -702,7 +723,7 @@ function openAdd(){
   document.getElementById('modal-title').textContent = 'Registrar Producto Extra / Manual';
   document.getElementById('modal-wrap').style.display = 'flex';
 }
- 
+
 function openEditWithData(id) {
   const p = products.find(x => x.id === id); if(!p) return;
   currentEditingProduct = { ...p };
@@ -715,9 +736,9 @@ function openEditWithData(id) {
   document.getElementById('modal-title').textContent = p.name;
   document.getElementById('modal-wrap').style.display = 'flex';
 }
- 
+
 function closeModal(){ document.getElementById('modal-wrap').style.display='none'; currentCode = ''; }
- 
+
 async function saveModal(e){
   e.preventDefault();
   const id = document.getElementById('m-id').value;
@@ -744,7 +765,7 @@ async function saveModal(e){
   }
   await saveToStorage(); closeModal(); updateStats(); renderTable(); updateCatFilter();
 }
- 
+
 async function startScanner(){
   document.getElementById('scanner-modal').style.display='flex';
   try{
@@ -763,13 +784,13 @@ async function startScanner(){
     });
   } catch(e) { alert('Asegúrate de conceder permisos a la cámara.'); stopScanner(); }
 }
- 
+
 function stopScanner(){
   document.getElementById('scanner-modal').style.display='none';
   if(codeReader){ try{ codeReader.reset(); }catch(e){} codeReader=null; }
 }
- 
-async function importExcel(inp){
+
+function importExcel(inp){
   const file = inp.files[0]; if(!file) return;
   const reader = new FileReader();
   reader.onload = async function(e){
@@ -778,6 +799,7 @@ async function importExcel(inp){
       const data = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {defval:'0', raw:false});
       
       products = [];
+      recalculateNextId();
       data.forEach(row => {
         const name = row['Articulo'] || row['articulo'] || row['ARTICULO'] || '';
         if(!name) return;
@@ -794,57 +816,72 @@ async function importExcel(inp){
         products.push({ id: nextId++, code, name, cat: subFamilia, stock, percha: 0, bodega: 0, isCountedMarked: false, countedBy: '' });
       });
       
+      recalculateNextId();
       await saveToStorage(); updateCatFilter(); updateStats(); renderTable(); showTab('inventario');
       document.getElementById('import-msg').innerHTML = `<p style="color:#16a34a; font-size:13px; font-weight:600;">✅ Éxito: ${products.length} productos cargados correctamente.</p>`;
     }catch(err){ alert('Error al interpretar el archivo de Excel.'); }
   };
   reader.readAsArrayBuffer(file);
 }
- 
+
 async function clearAuditor(){
   if(confirm("¿Estás seguro de que deseas vaciar los registros actuales?")){
-    if (window._db) {
-      try {
-        const colRef = window._fsCollection(window._db, COLLECTION);
-        const snap = await window._fsGetDocs(colRef);
-        const batch = window._fsWriteBatch(window._db);
-        snap.docs.forEach(d => batch.delete(d.ref));
-        await batch.commit();
-      } catch(e) { console.warn("Firestore clear error:", e); }
+    products = []; localStorage.removeItem('audit_droid_v2');
+    recalculateNextId();
+    try {
+      if (window.clearProductsFromFirebase) {
+        await window.clearProductsFromFirebase(currentUser);
+      } else {
+        console.warn("Firebase todavia no esta inicializado. Solo se limpio localStorage.");
+      }
+    } catch (error) {
+      console.error("Error al limpiar Firebase:", error);
+      alert("No se pudo limpiar Firebase. Revisa la consola del navegador.");
     }
-    products = []; localStorage.removeItem("audit_droid_v2");
-    activeCategory = ""; activeProgress = ""; activeAudit = "";
+    activeCategory = ''; activeProgress = ''; activeAudit = '';
     updateStats(); renderTable(); updateCatFilter();
-    document.getElementById("import-msg").innerHTML = "";
+    document.getElementById('import-msg').innerHTML = '';
   }
 }
- 
 
-window.handleLogin = handleLogin;
-window.checkAuth = checkAuth;
-window.logout = logout;
+async function initializeAppData() {
+  console.log("Inicializando datos de la app...");
+  recalculateNextId();
 
-// Inicialización: esperar Firebase o arrancar de localStorage
-async function init() {
-  await loadFromFirestore();
-  listenFirestore();
-  checkAuth();
-  window._firebaseInitDone = true;
-}
- 
-if (window._firebaseReady) {
-  init();
-} else {
-  document.addEventListener('firebase-ready', init, { once: true });
-  // Si Firebase tarda más de 3s, arranca con localStorage
-  setTimeout(() => {
-    if (!window._firebaseInitDone) {
-      products = JSON.parse(localStorage.getItem('audit_droid_v2')) || [];
-      nextId = products.length ? Math.max(...products.map(p=>p.id)) + 1 : 1;
-      checkAuth();
+  try {
+    let firebaseUser = null;
+    if (window.firebaseAuthReady) {
+      firebaseUser = await Promise.race([
+        window.firebaseAuthReady,
+        new Promise(resolve => setTimeout(() => resolve(null), 5000))
+      ]);
+
+      if (firebaseUser) {
+        console.log("Autenticacion Firebase lista antes de cargar datos. UID:", firebaseUser.uid);
+      } else {
+        console.warn("Firebase Auth no respondio a tiempo. Se usara localStorage.");
+      }
     }
-  }, 3000);
+
+    if (firebaseUser && window.loadProductsFromFirebase) {
+      const firebaseProducts = await window.loadProductsFromFirebase();
+      if (Array.isArray(firebaseProducts)) {
+        products = firebaseProducts;
+        localStorage.setItem('audit_droid_v2', JSON.stringify(products));
+        recalculateNextId();
+        console.log("Productos cargados desde Firebase:", products.length);
+      }
+    } else {
+      console.warn("Firebase no esta disponible. Se usara localStorage.");
+    }
+  } catch (error) {
+    console.warn("No se pudo cargar desde Firebase. Se usara localStorage.", error);
+  }
+
+  checkAuth();
 }
+
+initializeAppData();
 </script>
 </body>
 </html>
