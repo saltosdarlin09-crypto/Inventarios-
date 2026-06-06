@@ -240,6 +240,7 @@
         <thead>
           <tr>
             <th>Código</th>
+            <th>Codigo alternativo</th>
             <th>Articulo</th>
             <th>Sub Familia</th>
             <th>Stock Total</th>
@@ -248,6 +249,7 @@
         <tbody>
           <tr>
             <td>0440</td>
+            <td>7701234567890</td>
             <td>ACEITE ARGAN ROSADO...</td>
             <td>GENERAL</td>
             <td>6</td>
@@ -490,6 +492,35 @@ async function saveToStorage() {
 function getTotalReal(p) { return (parseInt(p.percha) || 0) + (parseInt(p.bodega) || 0); }
 function hasBeenCounted(p) { return p.percha !== 0 || p.bodega !== 0 || p.isCountedMarked === true; }
 
+function normalizeHeader(value) {
+  return String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
+}
+
+function getRowValue(row, names) {
+  const normalizedNames = names.map(normalizeHeader);
+  const key = Object.keys(row).find(k => normalizedNames.includes(normalizeHeader(k)));
+  return key ? row[key] : '';
+}
+
+function normalizeCode(value) {
+  return String(value || '').replace(/\s+/g, '').trim();
+}
+
+function codesMatch(a, b) {
+  const codeA = normalizeCode(a);
+  const codeB = normalizeCode(b);
+  if (!codeA || !codeB) return false;
+  if (codeA === codeB) return true;
+
+  const numberA = Number(codeA);
+  const numberB = Number(codeB);
+  return !Number.isNaN(numberA) && !Number.isNaN(numberB) && numberA === numberB;
+}
+
+function productMatchesCode(product, scannedCode) {
+  return codesMatch(product.code, scannedCode) || codesMatch(product.alternateCode, scannedCode);
+}
+
 function status(p){
   const r = getTotalReal(p);
   return r === p.stock ? 'ok' : r > p.stock ? 'low' : 'out'; 
@@ -550,7 +581,10 @@ function renderTable(){
   const q = document.getElementById('search').value.toLowerCase();
   
   let rows = products.filter(p => {
-    const matchQuery = !q || p.name.toLowerCase().includes(q) || p.code.toLowerCase().includes(q);
+    const productName = String(p.name || '').toLowerCase();
+    const productCode = String(p.code || '').toLowerCase();
+    const alternateCode = String(p.alternateCode || '').toLowerCase();
+    const matchQuery = !q || productName.includes(q) || productCode.includes(q) || alternateCode.includes(q);
     const matchCat = !activeCategory || p.cat === activeCategory;
     
     let matchProgress = true;
@@ -571,13 +605,13 @@ function renderTable(){
     const d = r - p.stock;
     const countedMark = hasBeenCounted(p) ? '✔️ ' : '⏳ ';
     const userMark = p.countedBy ? `<span style="color:#0284c7; background:#e0f2fe; padding:1px 4px; border-radius:4px; font-size:10px; font-weight:600;"><i class="ti ti-user"></i> ${p.countedBy}</span>` : '';
-    
     return `<tr onclick="openEditWithData(${p.id})">
       <td>
         <div style="font-weight:600; color:#1e293b; font-size:13px;">${countedMark}${p.name}</div>
         <div style="font-size:11px; color:#64748b; font-family:monospace; display:flex; align-items:center; gap:6px; margin-top:2px;">
           <span>Cód: ${p.code}</span> | <span style="color:#4f46e5;">${p.cat}</span> ${userMark}
         </div>
+        ${p.alternateCode ? `<div style="font-size:10px; color:#64748b; font-family:monospace; margin-top:1px;">Alt: ${p.alternateCode}</div>` : ''}
       </td>
       <td style="text-align:center; color:#64748b; font-weight:600;">${p.stock}</td>
       <td style="text-align:center;">
@@ -636,6 +670,7 @@ function renderAlerts(){
     return `<div class="alert-card" style="border-left:5px solid ${borderLeftColor}" onclick="openEditWithData(${p.id})">
       <div style="flex:1">
         <div style="font-size:13px; font-weight:600; color:#1e293b;">${p.name}</div>
+        ${p.alternateCode ? `<div style="font-size:11px; color:#64748b; font-family:monospace;">Alt: ${p.alternateCode}</div>` : ''}
         <div style="font-size:11px; color:#64748b; font-family:monospace;">Código: ${p.code}</div>
         <div style="font-size:11px; color:#475569; margin-top:2px;">Teórico: <b>${p.stock}</b> | Físico Real: <b>${getTotalReal(p)}</b></div>
         ${userMark}
@@ -665,6 +700,7 @@ function exportAuditExcel() {
     
     return {
       "Código": p.code,
+      "Codigo alternativo": p.alternateCode || '',
       "Artículo": p.name,
       "Sub Familia": p.cat,
       "Stock Teórico (Excel original)": p.stock,
@@ -728,6 +764,7 @@ function renderModalProductInfo(product) {
   el.innerHTML = `
     <div style="font-weight:700; color:#0f172a; margin-bottom:6px;">Informacion del articulo</div>
     <div><b>Codigo:</b> ${product.code || 'Sin codigo'}</div>
+    ${product.alternateCode ? `<div><b>Codigo alternativo:</b> ${product.alternateCode}</div>` : ''}
     <div><b>Articulo:</b> ${product.name || 'Sin nombre'}</div>
     <div><b>Sub familia:</b> ${product.cat || 'GENERAL'}</div>
     <div><b>Stock teorico:</b> ${product.stock || 0}</div>
@@ -739,7 +776,7 @@ function renderModalProductInfo(product) {
 }
 
 function openAdd(){
-  currentEditingProduct = { percha: 0, bodega: 0, isCountedMarked: true };
+  currentEditingProduct = { percha: 0, bodega: 0, isCountedMarked: true, alternateCode: '' };
   document.getElementById('modal-product-info').style.display = 'none';
   document.getElementById('modal-product-info').innerHTML = '';
   document.getElementById('m-id').value = '';
@@ -787,7 +824,7 @@ async function saveModal(e){
     const code = document.getElementById('m-code').value.trim() || 'MAN-'+Date.now();
     if(!name) return;
     products.push({ 
-      id: nextId++, code, name, cat: 'GENERAL', stock: 0, 
+      id: nextId++, code, alternateCode: '', name, cat: 'GENERAL', stock: 0, 
       percha: currentEditingProduct.percha, bodega: currentEditingProduct.bodega, 
       isCountedMarked: true, countedBy: currentUser 
     });
@@ -812,13 +849,7 @@ async function startScanner(){
       if(result){
         const code = String(result.getText()).trim();
         stopScanner();
-        const found = products.find(p => {
-          const productCode = String(p.code || '').trim();
-          const productCodeNumber = Number(productCode);
-          const scannedCodeNumber = Number(code);
-          const bothNumeric = productCode !== '' && code !== '' && !Number.isNaN(productCodeNumber) && !Number.isNaN(scannedCodeNumber);
-          return productCode === code || (bothNumeric && productCodeNumber === scannedCodeNumber);
-        });
+        const found = products.find(p => productMatchesCode(p, code));
         if(found) openEditWithData(found.id);
         else alert(`El codigo escaneado no esta registrado en la base de datos: ${code}`);
       }
@@ -842,19 +873,22 @@ function importExcel(inp){
       products = [];
       recalculateNextId();
       data.forEach(row => {
-        const name = row['Articulo'] || row['articulo'] || row['ARTICULO'] || '';
+        const name = getRowValue(row, ['Articulo', 'Artículo']);
         if(!name) return;
         
-        let rawStock = row['Stock Total'] || row['stock total'] || row['Stock'] || '0';
+        let rawStock = getRowValue(row, ['Stock Total', 'Stock']) || '0';
         rawStock = String(rawStock).replace(',', '.').trim(); 
         const stock = Math.floor(parseFloat(rawStock)) || 0;
         
-        let code = row['Código'] || row['codigo'] || row['CÓDIGO'] || 'REG-'+Math.floor(Math.random()*100000);
+        let code = getRowValue(row, ['Codigo', 'Código']) || 'REG-'+Math.floor(Math.random()*100000);
         code = String(code).trim();
+
+        let alternateCode = getRowValue(row, ['Codigo alternativo', 'Código alternativo', 'Cod Alternativo']);
+        alternateCode = String(alternateCode || '').trim();
         
-        const subFamilia = String(row['Sub Familia'] || row['sub familia'] || 'GENERAL').toUpperCase();
+        const subFamilia = String(getRowValue(row, ['Sub Familia']) || 'GENERAL').toUpperCase();
         
-        products.push({ id: nextId++, code, name, cat: subFamilia, stock, percha: 0, bodega: 0, isCountedMarked: false, countedBy: '' });
+        products.push({ id: nextId++, code, alternateCode, name, cat: subFamilia, stock, percha: 0, bodega: 0, isCountedMarked: false, countedBy: '' });
       });
       
       recalculateNextId();
