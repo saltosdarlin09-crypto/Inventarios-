@@ -271,6 +271,7 @@
     <form id="modal-form" onsubmit="saveModal(event)">
       <input type="hidden" id="m-id">
       <div class="field"><label>Descripción del Artículo</label><input type="text" id="m-name"></div>
+      <div id="modal-product-info" style="display:none; background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:10px; margin-bottom:8px; font-size:11px; color:#475569;"></div>
       <div class="field" style="display:none"><input type="text" id="m-code"><input type="text" id="m-cat"></div>
       <div class="field"><label>Stock Teórico (Excel)</label><input type="number" id="m-stock" value="0"></div>
       
@@ -712,8 +713,35 @@ function updateModalSummaryPreview() {
 }
 document.getElementById('m-real').addEventListener('input', updateModalSummaryPreview);
 
+function renderModalProductInfo(product) {
+  const el = document.getElementById('modal-product-info');
+  if (!el || !product) return;
+
+  const real = getTotalReal(product);
+  const diff = real - product.stock;
+  const productStatus = status(product);
+  const statusText = productStatus === 'ok' ? 'Cuadrado' : productStatus === 'low' ? 'Sobrante' : 'Faltante';
+  const countedText = hasBeenCounted(product) ? 'Si' : 'No';
+  const diffText = diff === 0 ? '0' : diff > 0 ? `+${diff}` : String(diff);
+
+  el.style.display = 'block';
+  el.innerHTML = `
+    <div style="font-weight:700; color:#0f172a; margin-bottom:6px;">Informacion del articulo</div>
+    <div><b>Codigo:</b> ${product.code || 'Sin codigo'}</div>
+    <div><b>Articulo:</b> ${product.name || 'Sin nombre'}</div>
+    <div><b>Sub familia:</b> ${product.cat || 'GENERAL'}</div>
+    <div><b>Stock teorico:</b> ${product.stock || 0}</div>
+    <div><b>Percha:</b> ${product.percha || 0} | <b>Bodega:</b> ${product.bodega || 0}</div>
+    <div><b>Total contado:</b> ${real} | <b>Diferencia:</b> ${diffText}</div>
+    <div><b>Estado:</b> ${statusText} | <b>Ya contado:</b> ${countedText}</div>
+    <div><b>Auditor:</b> ${product.countedBy || 'Sin registrar'}</div>
+  `;
+}
+
 function openAdd(){
   currentEditingProduct = { percha: 0, bodega: 0, isCountedMarked: true };
+  document.getElementById('modal-product-info').style.display = 'none';
+  document.getElementById('modal-product-info').innerHTML = '';
   document.getElementById('m-id').value = '';
   document.getElementById('m-code').value = currentCode || ''; document.getElementById('m-code').disabled = false;
   document.getElementById('m-name').value = ''; document.getElementById('m-name').disabled = false;
@@ -727,6 +755,7 @@ function openAdd(){
 function openEditWithData(id) {
   const p = products.find(x => x.id === id); if(!p) return;
   currentEditingProduct = { ...p };
+  renderModalProductInfo(p);
   document.getElementById('m-id').value = p.id;
   document.getElementById('m-code').value = p.code;
   document.getElementById('m-name').value = p.name; document.getElementById('m-name').disabled = true;
@@ -770,16 +799,28 @@ async function startScanner(){
   document.getElementById('scanner-modal').style.display='flex';
   try{
     const hints = new Map();
-    hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS, [ZXing.BarcodeFormat.EAN_13, ZXing.BarcodeFormat.EAN_8, ZXing.BarcodeFormat.CODE_128, ZXing.BarcodeFormat.UPC_A]);
+    hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS, [
+      ZXing.BarcodeFormat.QR_CODE,
+      ZXing.BarcodeFormat.EAN_13,
+      ZXing.BarcodeFormat.EAN_8,
+      ZXing.BarcodeFormat.CODE_128,
+      ZXing.BarcodeFormat.UPC_A
+    ]);
     codeReader = new ZXing.BrowserMultiFormatReader(hints, 250);
     
     await codeReader.decodeFromVideoDevice(undefined, 'scan-video', (result) => {
       if(result){
         const code = String(result.getText()).trim();
         stopScanner();
-        const found = products.find(p => p.code === code || parseInt(p.code) === parseInt(code));
+        const found = products.find(p => {
+          const productCode = String(p.code || '').trim();
+          const productCodeNumber = Number(productCode);
+          const scannedCodeNumber = Number(code);
+          const bothNumeric = productCode !== '' && code !== '' && !Number.isNaN(productCodeNumber) && !Number.isNaN(scannedCodeNumber);
+          return productCode === code || (bothNumeric && productCodeNumber === scannedCodeNumber);
+        });
         if(found) openEditWithData(found.id);
-        else { currentCode = code; openAdd(); }
+        else alert(`El codigo escaneado no esta registrado en la base de datos: ${code}`);
       }
     });
   } catch(e) { alert('Asegúrate de conceder permisos a la cámara.'); stopScanner(); }
